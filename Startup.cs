@@ -48,6 +48,13 @@ namespace AspNetCoreJwtDemo
                     };
                 });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireClaim("Roles", "admin"));
+                options.AddPolicy("Manager", policy => policy.RequireClaim("Roles", "manager", "admin"));
+                options.AddPolicy("Finance", policy => policy.RequireClaim("Roles", "finance", "manager", "admin"));
+            });
+
             services.AddScoped<IUserRepository, UserRepository>();
         }
 
@@ -60,7 +67,7 @@ namespace AspNetCoreJwtDemo
             }
 
             //  Before routing
-            //app.UseAuthentication();
+            app.UseAuthentication();
 
             app.UseRouting();
 
