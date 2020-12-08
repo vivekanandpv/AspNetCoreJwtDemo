@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AspNetCoreJwtDemo.Data;
+using AspNetCoreJwtDemo.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -46,6 +47,8 @@ namespace AspNetCoreJwtDemo
                         ValidateAudience = false
                     };
                 });
+
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,7 +60,7 @@ namespace AspNetCoreJwtDemo
             }
 
             //  Before routing
-            app.UseAuthentication();
+            //app.UseAuthentication();
 
             app.UseRouting();
 
