@@ -36,6 +36,14 @@ namespace AspNetCoreJwtDemo
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddCors(config =>
+            {
+                config.AddDefaultPolicy(c =>
+                {
+                    c.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                });
+            });
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -52,7 +60,7 @@ namespace AspNetCoreJwtDemo
             {
                 options.AddPolicy("Admin", policy => policy.RequireClaim("Roles", "admin"));
                 options.AddPolicy("Manager", policy => policy.RequireClaim("Roles", "manager", "admin"));
-                options.AddPolicy("Finance", policy => policy.RequireClaim("Roles", "finance", "manager", "admin"));
+                options.AddPolicy("Finance", policy => policy.RequireClaim("Roles", "finance"));
             });
 
             services.AddScoped<IUserRepository, UserRepository>();
@@ -70,6 +78,8 @@ namespace AspNetCoreJwtDemo
             app.UseAuthentication();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 
